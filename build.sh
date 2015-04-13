@@ -99,7 +99,7 @@ wget ${freeradiusUrl}
 tar jxf freeradius-server-${freeradiusVersion}.tar.bz2
 cd freeradius-server-${freeradiusVersion}/redhat/
 cp freeradius-* ${TOPDIR}/rpmbuild/SOURCES/
-cp ${TOPDIR}/src/freeradius.service ${TOPDIR}/rpmbuild/SOURCES/
+cp ${TOPDIR}/src/radiusd.service ${TOPDIR}/rpmbuild/SOURCES/
 cp ${TOPDIR}/src/freeradius.spec ${TOPDIR}/rpmbuild/SPECS/
 
 echo "Building Freeradius RPM ..."
