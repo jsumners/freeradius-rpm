@@ -102,7 +102,22 @@ cp freeradius-* ${TOPDIR}/rpmbuild/SOURCES/
 cp ${TOPDIR}/src/radiusd.service ${TOPDIR}/rpmbuild/SOURCES/
 cp ${TOPDIR}/src/freeradius.spec ${TOPDIR}/rpmbuild/SPECS/
 
-echo "Building Freeradius RPM ..."
-
 cd ${TOPDIR}/rpmbuild/
-rpmbuild --define "_topdir ${TOPDIR}/rpmbuild" -ba "SPECS/freeradius.spec"
+
+if [ -f ${TOPDIR}/gpg-env ]; then
+  echo "Building signed Freeradius RPM ..."
+  source ${TOPDIR}/gpg-env
+
+  if [ "${gpg_bin}" != "" ]; then
+    rpmbuild --define "_topdir ${TOPDIR}/rpmbuild" --define "_signature ${signature}" \
+      --define "_gpg_path ${gpg_path}" --define "_gpg_name ${gpg_name}" \
+      --define "__gpg ${gpg_bin}" --sign -ba "SPECS/freeradius.spec"
+  else
+    rpmbuild --define "_topdir ${TOPDIR}/rpmbuild" --define "_signature ${signature}" \
+      --define "_gpg_path ${gpg_path}" --define "_gpg_name ${gpg_name}" \
+      --sign -ba "SPECS/freeradius.spec"
+  fi
+else
+  echo "Building Freeradius RPM ..."
+  rpmbuild --define "_topdir ${TOPDIR}/rpmbuild" -ba "SPECS/freeradius.spec"
+fi
